@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ text.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ text.title }}</h1>
+        <p class="subtitle">{{ text.subtitle }}</p>
+
+        <div class="language-box">
+            <a href="/?lang=ko">한국어</a>
+            <a href="/?lang=en">English</a>
+            <a href="/?lang=ja">日本語</a>
+            <a href="/?lang=zh">繁體中文</a>
+            <a href="/?lang=de">Deutsch</a>
+        </div>
+
+        <form method="POST" class="card">
+            <label for="skill">{{ text.input_label }}</label>
+            <input type="number" id="skill" name="skill" min="0" max="5000" value="2500" required>
+            <button type="submit">{{ text.button }}</button>
+        </form>
+
+        {% if result %}
+        <div class="result card">
+            <h2>{{ text.result_title }}</h2>
+
+            <div class="summary-box">
+                <p><strong>{{ text.avg_team1 }}</strong>: {{ result.avg_team1 }}</p>
+                <p><strong>{{ text.avg_team2 }}</strong>: {{ result.avg_team2 }}</p>
+                <p><strong>{{ text.win }}</strong>: {{ result.win_prob }}%</p>
+            </div>
+
+            <div class="team-section">
+                <div class="card team-card">
+                    <h3>{{ text.team_a }}</h3>
+                    {% for p in result.team1 %}
+                    <p>
+                        {% if p.role == "tank" %}🛡️{% endif %}
+                        {% if p.role == "dps" %}⚔️{% endif %}
+                        {% if p.role == "support" %}💊{% endif %}
+                        {{ p.name }} ({{ p.mmr }})
+                    </p>
+                    {% endfor %}
+                </div>
+
+                <div class="card team-card">
+                    <h3>{{ text.team_b }}</h3>
+                    {% for p in result.team2 %}
+                    <p>
+                        {% if p.role == "tank" %}🛡️{% endif %}
+                        {% if p.role == "dps" %}⚔️{% endif %}
+                        {% if p.role == "support" %}💊{% endif %}
+                        {{ p.name }} ({{ p.mmr }})
+                    </p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="summary-box">
+                <h3>{{ text.fairness }}</h3>
+                <p>{{ text.avg_diff }}: {{ result.fair_avg }}</p>
+                <p>{{ text.std_dev }}: {{ result.fair_std }}</p>
+                <p>{{ text.team1_balance }}: {{ result.team1_balance }}</p>
+                <p>{{ text.team2_balance }}: {{ result.team2_balance }}</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
