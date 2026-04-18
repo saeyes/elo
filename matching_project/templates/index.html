@@ -68,6 +68,10 @@
                 <p>{{ text.team1_balance }}: {{ result.team1_balance }}</p>
                 <p>{{ text.team2_balance }}: {{ result.team2_balance }}</p>
             </div>
+            <form method="POST" action="/result">
+                 <button name="result" value="A">Team A 승리</button>
+                 <button name="result" value="B">Team B 승리</button>
+            </form>
         </div>
         {% endif %}
     </div>
