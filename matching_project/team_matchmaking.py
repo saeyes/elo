@@ -825,6 +825,14 @@ def find_best_team_match(players, target_player_id=None, trials=120):
                 best_pair = (team1, team2)
 
         if best_pair:
-            return best_pair, round(avg_diff, 2)
+    return best_pair, round(avg_diff, 2)
 
-    return None, None
+fallback = fallback_random_teams(players)
+if fallback:
+    team1, team2 = fallback
+    return (team1, team2), round(abs(team_average(team1) - team_average(team2)), 2)
+
+players = players[:10]
+team1 = players[:5]
+team2 = players[5:10]
+return (team1, team2), round(abs(team_average(team1) - team_average(team2)), 2)
