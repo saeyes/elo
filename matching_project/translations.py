@@ -1,69 +1,109 @@
 translations = {
     "ko": {
-        "title": "공정한 게임 팀 매칭 시뮬레이터",
-        "subtitle": "5인 팀(1탱 2딜 2힐) 기반 공정성 평가 시스템",
-        "input_label": "내 점수 입력",
-        "button": "팀 매칭 시작",
-        "result_title": "팀 매칭 결과",
+        "title": "팀 매칭 시스템",
+        "subtitle": "MMR 기반 공정 매칭",
+        "input_label": "점수 입력",
+        "button": "매칭 시작",
+
+        "result_title": "매칭 결과",
         "team_a": "팀 A",
         "team_b": "팀 B",
-        "win": "예상 승률",
+
         "avg_team1": "팀 A 평균 점수",
         "avg_team2": "팀 B 평균 점수",
-        "fairness": "공정성 평가",
-        "avg_diff": "팀 평균 점수 차이",
-        "std_dev": "팀 평균 표준편차",
-        "team1_balance": "팀 A 내부 편차",
-        "team2_balance": "팀 B 내부 편차"
+        "win": "예상 승률",
+
+        "fairness": "공정성 분석",
+        "avg_diff": "평균 차이",
+        "std_dev": "표준편차",
+        "team1_balance": "팀 A 균형도",
+        "team2_balance": "팀 B 균형도",
     },
 
     "en": {
-        "title": "Fair Game Team Matchmaking Simulator",
-        "subtitle": "5-player team fairness system (1 Tank, 2 DPS, 2 Support)",
-        "input_label": "Enter your rating",
-        "button": "Start Team Match",
-        "result_title": "Team Match Result",
+        "title": "Team Matchmaking System",
+        "subtitle": "Fair matchmaking based on MMR",
+        "input_label": "Enter your MMR",
+        "button": "Start Matching",
+
+        "result_title": "Match Result",
         "team_a": "Team A",
         "team_b": "Team B",
-        "win": "Expected Win Rate",
-        "avg_team1": "Team A Average Rating",
-        "avg_team2": "Team B Average Rating",
-        "fairness": "Fairness Evaluation",
-        "avg_diff": "Average Team Rating Difference",
-        "std_dev": "Team Mean Standard Deviation",
-        "team1_balance": "Team A Internal Deviation",
-        "team2_balance": "Team B Internal Deviation"
+
+        "avg_team1": "Team A Average",
+        "avg_team2": "Team B Average",
+        "win": "Win Probability",
+
+        "fairness": "Fairness Analysis",
+        "avg_diff": "Average Difference",
+        "std_dev": "Standard Deviation",
+        "team1_balance": "Team A Balance",
+        "team2_balance": "Team B Balance",
     },
 
     "ja": {
-        "title": "公正なゲームチームプレイマッチングシミュレーター",
-        "subtitle": "5人マッチ（1タンク・2DPS・2サポート）に基づく公正性評価システム",
-        "input_label": "自分のレートを入力",
-        "button": "今すぐマッチ",
+        "title": "チームマッチングシステム",
+        "subtitle": "MMRベースの公平なマッチング",
+        "input_label": "スコア入力",
+        "button": "マッチ開始",
+
         "result_title": "マッチ結果",
         "team_a": "チームA",
         "team_b": "チームB",
-        "win": "予想勝率",
-        "avg_team1": "チームA平均レート",
-        "avg_team2": "チームB平均レート",
-        "fairness": "公正性評価",
-        "avg_diff": "チーム平均レート差",
-        "std_dev": "チーム平均標準偏差",
-        "team1_balance": "チームA内部偏差",
-        "team2_balance": "チームB内部偏差"
+
+        "avg_team1": "チームA平均",
+        "avg_team2": "チームB平均",
+        "win": "勝率",
+
+        "fairness": "公平性分析",
+        "avg_diff": "平均差",
+        "std_dev": "標準偏差",
+        "team1_balance": "チームAバランス",
+        "team2_balance": "チームBバランス",
     },
 
     "zh": {
-        "title": "公平遊戲團隊配對模擬器",
-        "subtitle": "以 5 人隊伍（1 坦克、2 輸出、2 輔助）為基礎的公平性評估系統",
-        "input_label": "輸入你的分數",
-        "button": "開始團隊配對",
-        "result_title": "團隊配對結果",
+        "title": "團隊匹配系統",
+        "subtitle": "基於MMR的公平匹配",
+        "input_label": "輸入分數",
+        "button": "開始匹配",
+
+        "result_title": "匹配結果",
         "team_a": "隊伍A",
         "team_b": "隊伍B",
-        "win": "預測勝率",
-        "avg_team1": "隊伍A平均分數",
-        "avg_team2": "隊伍B平均分數",
+
+        "avg_team1": "隊伍A平均",
+        "avg_team2": "隊伍B平均",
+        "win": "勝率",
+
+        "fairness": "公平性分析",
+        "avg_diff": "平均差",
+        "std_dev": "標準差",
+        "team1_balance": "隊伍A平衡",
+        "team2_balance": "隊伍B平衡",
+    },
+
+    "de": {
+        "title": "Team-Matchmaking-System",
+        "subtitle": "Faires Matchmaking basierend auf MMR",
+        "input_label": "Punktzahl eingeben",
+        "button": "Match starten",
+
+        "result_title": "Match-Ergebnis",
+        "team_a": "Team A",
+        "team_b": "Team B",
+
+        "avg_team1": "Team A Durchschnitt",
+        "avg_team2": "Team B Durchschnitt",
+        "win": "Siegwahrscheinlichkeit",
+
+        "fairness": "Fairness-Analyse",
+        "avg_diff": "Durchschnittsdifferenz",
+        "std_dev": "Standardabweichung",
+        "team1_balance": "Team A Balance",
+        "team2_balance": "Team B Balance",
+    }
+}        "avg_team2": "隊伍B平均分數",
         "fairness": "公平性評估",
         "avg_diff": "隊伍平均分數差",
         "std_dev": "隊伍平均標準差",
