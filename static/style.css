@@ -1,0 +1,97 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    color: #222;
+}
+
+.container {
+    width: 90%;
+    max-width: 1050px;
+    margin: 40px auto;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.language-box {
+    margin-bottom: 20px;
+}
+
+.language-box a {
+    margin: 0 8px;
+    text-decoration: none;
+    color: #1565c0;
+    font-weight: bold;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+form input {
+    width: 240px;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+}
+
+form button {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #1565c0;
+    color: white;
+}
+
+form button:hover {
+    background: #0d47a1;
+}
+
+.summary-box {
+    margin-top: 20px;
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.team-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.team-card {
+    text-align: left;
+}
+
+@media (max-width: 700px) {
+    .team-section {
+        grid-template-columns: 1fr;
+    }
+}
