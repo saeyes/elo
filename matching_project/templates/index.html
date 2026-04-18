@@ -2,85 +2,101 @@
 <html lang="{{ lang }}">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ text.title }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <div class="container">
+        <h1>{{ text.title }}</h1>
+        <p class="subtitle">{{ text.subtitle }}</p>
 
-<div class="container">
+        <div class="language-box">
+            <a href="/?lang=ko">한국어</a>
+            <a href="/?lang=en">English</a>
+            <a href="/?lang=ja">日本語</a>
+            <a href="/?lang=zh">繁體中文</a>
+            <a href="/?lang=de">Deutsch</a>
+        </div>
 
-    <h1>{{ text.title }}</h1>
+        <form method="POST" class="card">
+            <label for="skill">{{ text.input_label }}</label>
+            <input type="number" id="skill" name="skill" min="0" max="5000"
+                   value="{{ skill_value }}"
+                   placeholder="{{ text.input_label }}" required>
+            <button type="submit">{{ text.button }}</button>
+        </form>
 
-    <form method="POST" class="card">
-        <label>{{ text.input_label }}</label>
-        <input type="number" name="skill" min="0" max="5000"
-               value="{{ skill_value }}"
-               placeholder="MMR 입력" required>
-        <button type="submit">{{ text.button }}</button>
-    </form>
+        <!-- ❌ 매칭 실패 -->
+        {% if error %}
+        <div class="summary-box">
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
 
-    <!-- ❌ 매칭 실패 메시지 -->
-    {% if error %}
-    <div class="summary-box">
-        <p>{{ error }}</p>
+        <!-- 🔥 매칭 결과 -->
+        {% if result %}
+        <div class="result card">
+            <h2>{{ text.result_title }}</h2>
+
+            <div class="summary-box">
+                <p><strong>{{ text.avg_team1 }}</strong>: {{ result.avg_team1 }}</p>
+                <p><strong>{{ text.avg_team2 }}</strong>: {{ result.avg_team2 }}</p>
+                <p><strong>{{ text.win }}</strong>: {{ result.win_prob }}%</p>
+            </div>
+
+            <div class="team-section">
+                <!-- 팀 A -->
+                <div class="card team-card">
+                    <h3>{{ text.team_a }}</h3>
+                    {% for p in result.team1 %}
+                    <p>
+                        {% if p.role == "tank" %}🛡️{% endif %}
+                        {% if p.role == "dps" %}⚔️{% endif %}
+                        {% if p.role == "support" %}💊{% endif %}
+                        {{ p.name }} ({{ p.mmr }})
+                    </p>
+                    {% endfor %}
+                </div>
+
+                <!-- 팀 B -->
+                <div class="card team-card">
+                    <h3>{{ text.team_b }}</h3>
+                    {% for p in result.team2 %}
+                    <p>
+                        {% if p.role == "tank" %}🛡️{% endif %}
+                        {% if p.role == "dps" %}⚔️{% endif %}
+                        {% if p.role == "support" %}💊{% endif %}
+                        {{ p.name }} ({{ p.mmr }})
+                    </p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- 공정성 -->
+            <div class="summary-box">
+                <h3>{{ text.fairness }}</h3>
+                <p>{{ text.avg_diff }}: {{ result.fair_avg }}</p>
+                <p>{{ text.std_dev }}: {{ result.fair_std }}</p>
+                <p>{{ text.team1_balance }}: {{ result.team1_balance }}</p>
+                <p>{{ text.team2_balance }}: {{ result.team2_balance }}</p>
+            </div>
+
+            <!-- 🔥 승패 버튼 -->
+            <form method="POST" action="/result" class="summary-box">
+                <button name="result" value="A">🏆 {{ text.team_a }} 승리</button>
+                <button name="result" value="B">🏆 {{ text.team_b }} 승리</button>
+            </form>
+
+            <!-- 🔥 결과 표시 -->
+            {% if last_result %}
+            <div class="summary-box">
+                <p><strong>{{ last_result }}</strong></p>
+            </div>
+            {% endif %}
+
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
-
-    <!-- 🔥 결과 영역 -->
-    {% if result %}
-
-    <div class="summary-box">
-        <p>팀 A 평균 점수: {{ result.avg_team1 }}</p>
-        <p>팀 B 평균 점수: {{ result.avg_team2 }}</p>
-        <p>예상 승률: {{ result.win_prob }}%</p>
-    </div>
-
-    <div class="card">
-        <h3>팀 A</h3>
-        {% for p in result.team1 %}
-        <p>
-            {% if p.role == "tank" %}🛡️{% endif %}
-            {% if p.role == "dps" %}⚔️{% endif %}
-            {% if p.role == "support" %}💊{% endif %}
-            {{ p.name }} ({{ p.mmr }})
-        </p>
-        {% endfor %}
-    </div>
-
-    <div class="card">
-        <h3>팀 B</h3>
-        {% for p in result.team2 %}
-        <p>
-            {% if p.role == "tank" %}🛡️{% endif %}
-            {% if p.role == "dps" %}⚔️{% endif %}
-            {% if p.role == "support" %}💊{% endif %}
-            {{ p.name }} ({{ p.mmr }})
-        </p>
-        {% endfor %}
-    </div>
-
-    <!-- 공정성 -->
-    <div class="summary-box">
-        <p>평균 차이: {{ result.fair_avg }}</p>
-        <p>표준편차: {{ result.fair_std }}</p>
-    </div>
-
-    <!-- 🔥 승리 버튼 -->
-    <form method="POST" action="/result">
-        <button name="result" value="A">Team A 승리</button>
-        <button name="result" value="B">Team B 승리</button>
-    </form>
-
-    <!-- 🔥 승패 결과 표시 -->
-    {% if last_result %}
-    <div class="summary-box">
-        <p>{{ last_result }}</p>
-    </div>
-    {% endif %}
-
-    {% endif %}
-
-</div>
-
 </body>
 </html>
