@@ -275,7 +275,7 @@ def find_best_team_match(players, target_player_id=None, trials=60):
         team1, team2 = fallback
         return (team1, team2), round(abs(team_average(team1) - team_average(team2)), 2)
 
-    return best_pair, round(best_avg_diff, 2)    return base
+    return best_pair, round(best_avg_diff, 2)  
 
 
 def team_average(team):
