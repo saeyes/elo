@@ -94,7 +94,7 @@ def find_best_team_match(players):
 
     return (team1, team2), round(abs(team_average(team1) - team_average(team2)), 2)        p for p in others
         if target_limit < abs(p["skill"] - target["skill"]) <= target_limit + 500
-    ]
+    
     mid_players = sorted(
         mid_players,
         key=lambda x: abs(x["skill"] - target["skill"])
