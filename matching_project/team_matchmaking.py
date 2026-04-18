@@ -213,7 +213,7 @@ def score_match(team1, team2):
     return avg_diff + std_penalty * 0.1
 
 
-def find_best_team_match(players, target_player_id=None, trials=6974):
+def find_best_team_match(players, target_player_id=None, trials=120):
     candidate_players = pick_near_players(players, target_player_id=target_player_id, count=10)
 
     if candidate_players is None or len(candidate_players) < 10:
