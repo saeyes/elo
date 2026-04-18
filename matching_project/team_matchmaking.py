@@ -228,7 +228,7 @@ def find_best_team_match(players, target_player_id=None, trials=150):
     if best_pair is None:
         return None, None
 
-    return best_pair, round(best_avg_diff, 2)    return base
+    return best_pair, round(best_avg_diff, 2)   
 
 
 def team_average(team):
