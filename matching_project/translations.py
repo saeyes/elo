@@ -103,29 +103,4 @@ translations = {
         "team1_balance": "Team A Balance",
         "team2_balance": "Team B Balance",
     }
-}        "avg_team2": "隊伍B平均分數",
-        "fairness": "公平性評估",
-        "avg_diff": "隊伍平均分數差",
-        "std_dev": "隊伍平均標準差",
-        "team1_balance": "隊伍A內部偏差",
-        "team2_balance": "隊伍B內部偏差"
-    },
-
-    "de": {
-        "title": "Fairer Team-Matchmaking-Simulator",
-        "subtitle": "Fairness-Bewertungssystem für 5er-Teams (1 Tank, 2 DPS, 2 Support)",
-        "input_label": "Gib deine Punktzahl ein",
-        "button": "Team-Match starten",
-        "result_title": "Team-Match-Ergebnis",
-        "team_a": "Team A",
-        "team_b": "Team B",
-        "win": "Erwartete Gewinnchance",
-        "avg_team1": "Durchschnittswert Team A",
-        "avg_team2": "Durchschnittswert Team B",
-        "fairness": "Fairnessbewertung",
-        "avg_diff": "Durchschnittlicher Team-Unterschied",
-        "std_dev": "Standardabweichung der Teammittelwerte",
-        "team1_balance": "Interne Abweichung Team A",
-        "team2_balance": "Interne Abweichung Team B"
-    }
-}
+}        
