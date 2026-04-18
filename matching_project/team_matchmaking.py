@@ -25,7 +25,7 @@ def get_tier(skill):
 def allowed_gap(skill):
     tier = get_tier(skill)
 
-    # 다이아부터는 500으로 더 엄격하게
+    # 다이아부터 더 엄격하게
     if tier in ["Diamond", "Master", "Grandmaster", "Champion"]:
         return 500
     else:
@@ -56,52 +56,70 @@ def assign_roles(players):
 
 
 def pick_near_players(players, target_player_id=None, count=10):
+    """
+    특정 플레이어를 기준으로:
+    - 가까운 플레이어 위주
+    - 일부는 조금 더 넓은 범위
+    를 섞어서 선택
+    """
     if target_player_id is None:
-        return sorted(players, key=lambda x: x["skill"])[:count]
+        sorted_players = sorted(players, key=lambda x: x["skill"])
+        return sorted_players[:count]
 
     target = None
+
+    # 1. 먼저 target 찾기
     for p in players:
         if p["id"] == target_player_id:
             target = p
             break
 
+    # target 없으면 실패
     if target is None:
-        return sorted(players, key=lambda x: x["skill"])[:count]
+        return None
 
     target_limit = allowed_gap(target["skill"])
+    others = [p for p in players if p["id"] != target_player_id]
 
-    others = []
-    for p in players:
-        if p["id"] == target_player_id:
-            continue
+    # 2. 아주 가까운 플레이어
+    close_players = [
+        p for p in others
+        if abs(p["skill"] - target["skill"]) <= target_limit
+    ]
+    close_players = sorted(
+        close_players,
+        key=lambda x: abs(x["skill"] - target["skill"])
+    )
 
-        diff = abs(p["skill"] - target["skill"])
+    # 3. 중간 범위 플레이어
+    mid_players = [
+        p for p in others
+        if target_limit < abs(p["skill"] - target["skill"]) <= target_limit + 300
+    ]
+    mid_players = sorted(
+        mid_players,
+        key=lambda x: abs(x["skill"] - target["skill"])
+    )
 
-        # target 기준 허용 범위
-        if diff <= target_limit:
-            others.append(p)
+    # 4. 먼 플레이어
+    far_players = [
+        p for p in others
+        if abs(p["skill"] - target["skill"]) > target_limit + 300
+    ]
+    random.shuffle(far_players)
 
-others = sorted(others, key=lambda x: abs(x["skill"] - target["skill"]))
+    selected = [target]
 
-# 가까운 애들
-close_players = others[:6]
+    # 가까운 플레이어 우선
+    selected += close_players[:6]
 
-# 조금 떨어진 애들
-mid_players = others[6:9]
+    # 중간 범위 일부
+    selected += mid_players[:3]
 
-# 나머지 랜덤
-import random
-far_players = others[9:]
-random.shuffle(far_players)
-
-selected = [target]
-selected += close_players
-selected += mid_players
-
-# 부족하면 랜덤으로 채움
-remaining = count - len(selected)
-if remaining > 0:
-    selected += far_players[:remaining]
+    # 부족하면 먼 플레이어로 채움
+    remaining = count - len(selected)
+    if remaining > 0:
+        selected += far_players[:remaining]
 
     return selected[:count]
 
@@ -141,8 +159,7 @@ def balance_role_group(group):
 
 def is_team_gap_valid(team):
     """
-    같은 팀 안에서 팀원 간 점수 차이가 허용 범위를 넘는지 검사
-    각 플레이어의 tier 기준을 모두 만족해야 함
+    한 팀 내부 최대 점수 차이가 각 플레이어 기준 허용 범위를 넘지 않는지 검사
     """
     skills = [p["skill"] for p in team]
     max_skill = max(skills)
@@ -159,6 +176,7 @@ def is_team_gap_valid(team):
 def build_balanced_teams(players):
     role_map = split_by_role(players)
 
+    # 역할 수 부족하면 실패
     if len(role_map["tank"]) < 2 or len(role_map["dps"]) < 4 or len(role_map["support"]) < 4:
         return None
 
@@ -180,7 +198,7 @@ def build_balanced_teams(players):
     team1 = tank_team1 + dps_team1 + sup_team1
     team2 = tank_team2 + dps_team2 + sup_team2
 
-    # 새 규칙 적용
+    # 팀 내부 격차 검사
     if not is_team_gap_valid(team1):
         return None
     if not is_team_gap_valid(team2):
@@ -198,8 +216,7 @@ def score_match(team1, team2):
 def find_best_team_match(players, target_player_id=None, trials=50):
     candidate_players = pick_near_players(players, target_player_id=target_player_id, count=10)
 
-    # 사람이 너무 적으면 실패
-    if len(candidate_players) < 10:
+    if candidate_players is None or len(candidate_players) < 10:
         return None, None
 
     best_pair = None
