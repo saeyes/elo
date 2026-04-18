@@ -1,0 +1,91 @@
+translations = {
+    "ko": {
+        "title": "공정한 게임 팀 매칭 시뮬레이터",
+        "subtitle": "5인 팀(1탱 2딜 2힐) 기반 공정성 평가 시스템",
+        "input_label": "내 점수 입력",
+        "button": "팀 매칭 시작",
+        "result_title": "팀 매칭 결과",
+        "team_a": "팀 A",
+        "team_b": "팀 B",
+        "win": "예상 승률",
+        "avg_team1": "팀 A 평균 점수",
+        "avg_team2": "팀 B 평균 점수",
+        "fairness": "공정성 평가",
+        "avg_diff": "팀 평균 점수 차이",
+        "std_dev": "팀 평균 표준편차",
+        "team1_balance": "팀 A 내부 편차",
+        "team2_balance": "팀 B 내부 편차"
+    },
+
+    "en": {
+        "title": "Fair Game Team Matchmaking Simulator",
+        "subtitle": "5-player team fairness system (1 Tank, 2 DPS, 2 Support)",
+        "input_label": "Enter your rating",
+        "button": "Start Team Match",
+        "result_title": "Team Match Result",
+        "team_a": "Team A",
+        "team_b": "Team B",
+        "win": "Expected Win Rate",
+        "avg_team1": "Team A Average Rating",
+        "avg_team2": "Team B Average Rating",
+        "fairness": "Fairness Evaluation",
+        "avg_diff": "Average Team Rating Difference",
+        "std_dev": "Team Mean Standard Deviation",
+        "team1_balance": "Team A Internal Deviation",
+        "team2_balance": "Team B Internal Deviation"
+    },
+
+    "ja": {
+        "title": "公正なゲームチームプレイマッチングシミュレーター",
+        "subtitle": "5人マッチ（1タンク・2DPS・2サポート）に基づく公正性評価システム",
+        "input_label": "自分のレートを入力",
+        "button": "今すぐマッチ",
+        "result_title": "マッチ結果",
+        "team_a": "チームA",
+        "team_b": "チームB",
+        "win": "予想勝率",
+        "avg_team1": "チームA平均レート",
+        "avg_team2": "チームB平均レート",
+        "fairness": "公正性評価",
+        "avg_diff": "チーム平均レート差",
+        "std_dev": "チーム平均標準偏差",
+        "team1_balance": "チームA内部偏差",
+        "team2_balance": "チームB内部偏差"
+    },
+
+    "zh": {
+        "title": "公平遊戲團隊配對模擬器",
+        "subtitle": "以 5 人隊伍（1 坦克、2 輸出、2 輔助）為基礎的公平性評估系統",
+        "input_label": "輸入你的分數",
+        "button": "開始團隊配對",
+        "result_title": "團隊配對結果",
+        "team_a": "隊伍A",
+        "team_b": "隊伍B",
+        "win": "預測勝率",
+        "avg_team1": "隊伍A平均分數",
+        "avg_team2": "隊伍B平均分數",
+        "fairness": "公平性評估",
+        "avg_diff": "隊伍平均分數差",
+        "std_dev": "隊伍平均標準差",
+        "team1_balance": "隊伍A內部偏差",
+        "team2_balance": "隊伍B內部偏差"
+    },
+
+    "de": {
+        "title": "Fairer Team-Matchmaking-Simulator",
+        "subtitle": "Fairness-Bewertungssystem für 5er-Teams (1 Tank, 2 DPS, 2 Support)",
+        "input_label": "Gib deine Punktzahl ein",
+        "button": "Team-Match starten",
+        "result_title": "Team-Match-Ergebnis",
+        "team_a": "Team A",
+        "team_b": "Team B",
+        "win": "Erwartete Gewinnchance",
+        "avg_team1": "Durchschnittswert Team A",
+        "avg_team2": "Durchschnittswert Team B",
+        "fairness": "Fairnessbewertung",
+        "avg_diff": "Durchschnittlicher Team-Unterschied",
+        "std_dev": "Standardabweichung der Teammittelwerte",
+        "team1_balance": "Interne Abweichung Team A",
+        "team2_balance": "Interne Abweichung Team B"
+    }
+}
