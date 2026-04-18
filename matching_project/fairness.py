@@ -1,6 +1,5 @@
 import statistics
 
-
 def fairness_score(team1, team2):
     avg1 = sum(p["skill"] for p in team1) / len(team1)
     avg2 = sum(p["skill"] for p in team2) / len(team2)
