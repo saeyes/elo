@@ -24,7 +24,7 @@ def index():
 
         my_skill = max(0, min(my_skill, 5000))
 
-        players = generate_players(9)
+        players = generate_players(29)
         players.append({
             "id": "YOU",
             "skill": my_skill
