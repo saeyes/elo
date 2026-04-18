@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 
 from distribution import generate_players
 from team_matchmaking import find_best_team_match, team_average
-from elo import expected_score
+from elo import expected_score, update_rating
 from fairness import fairness_score
 from translations import translations
 
@@ -10,7 +10,9 @@ app = Flask(__name__)
 
 
 @app.route("/", methods=["GET", "POST"])
-def index():
+def index(team1, team2 = best_match):
+    global LAST_MATCH
+LAST_MATCH = (team1, team2)
     lang = request.args.get("lang", "ko")
     text = translations.get(lang, translations["ko"])
 
@@ -68,3 +70,34 @@ def index():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+from flask import redirect, url_for
+
+@app.route("/result", methods=["POST"])
+def match_result():
+    result = request.form.get("result")  # "A" or "B"
+
+    global LAST_MATCH
+
+    # 안전 처리
+    if LAST_MATCH is None:
+        return redirect(url_for("index"))
+
+    team1, team2 = LAST_MATCH
+
+    avg1 = team_average(team1)
+    avg2 = team_average(team2)
+
+    if result == "A":
+        new_avg1, new_avg2 = update_rating(avg1, avg2, 1)
+    else:
+        new_avg1, new_avg2 = update_rating(avg1, avg2, 0)
+
+    # 팀 전체 점수 반영
+    for p in team1:
+        p["skill"] = int(new_avg1)
+
+    for p in team2:
+        p["skill"] = int(new_avg2)
+
+    return redirect(url_for("index"))
