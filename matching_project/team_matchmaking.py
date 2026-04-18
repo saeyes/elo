@@ -103,7 +103,7 @@ remaining = count - len(selected)
 if remaining > 0:
     selected += far_players[:remaining]
 
-  return selected[:count]
+    return selected[:count]
 
 
 def split_by_role(players):
