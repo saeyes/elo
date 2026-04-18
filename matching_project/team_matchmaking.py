@@ -270,22 +270,18 @@ def find_best_team_match(players, target_player_id=None, trials=60):
 
     if best_pair is None:
         fallback = fallback_random_teams(players)
-        if fallback is None:
-            if best_pair is None:
-    fallback = fallback_random_teams(players)
 
-    if fallback:
-        team1, team2 = fallback
+        if fallback:
+            team1, team2 = fallback
+            return (team1, team2), round(abs(team_average(team1) - team_average(team2)), 2)
+
+        # 마지막 강제 생성 (절대 실패 안 하게)
+        players = players[:10]
+        team1 = players[:5]
+        team2 = players[5:10]
         return (team1, team2), round(abs(team_average(team1) - team_average(team2)), 2)
 
-    # 👉 마지막 강제 생성 (절대 실패 안 하게)
-    players = players[:10]
-    team1 = players[:5]
-    team2 = players[5:10]
-    return (team1, team2), round(abs(team_average(team1) - team_average(team2)), 2)
-
-    return best_pair, round(best_avg_diff, 2)  
-
+    return best_pair, round(best_avg_diff, 2)
 
 def team_average(team):
     return sum(p["skill"] for p in team) / len(team)
