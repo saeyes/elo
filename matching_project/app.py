@@ -76,6 +76,7 @@ def match_result():
     result = request.form.get("result")  # "A" or "B"
 
     global LAST_MATCH
+    global LAST_RESULT
 
     # 안전 처리
     if LAST_MATCH is None:
@@ -90,9 +91,11 @@ def match_result():
     avg2 = team_average(team2)
 
     if result == "A":
-        new_avg1, new_avg2 = update_rating(avg1, avg2, 1)
+      new_avg1, new_avg2 = update_rating(avg1, avg2, 1)
+      LAST_RESULT = "Team A 승리"
     else:
-        new_avg1, new_avg2 = update_rating(avg1, avg2, 0)
+      new_avg1, new_avg2 = update_rating(avg1, avg2, 0)
+      LAST_RESULT = "Team B 승리"
 
     # 팀 전체 점수 반영
     for p in team1:
