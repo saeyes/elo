@@ -81,10 +81,29 @@ def pick_near_players(players, target_player_id=None, count=10):
         if diff <= target_limit:
             others.append(p)
 
-    others = sorted(others, key=lambda x: abs(x["skill"] - target["skill"]))
+others = sorted(others, key=lambda x: abs(x["skill"] - target["skill"]))
 
-    selected = [target] + others[:count - 1]
-    return selected
+# 가까운 애들
+close_players = others[:6]
+
+# 조금 떨어진 애들
+mid_players = others[6:9]
+
+# 나머지 랜덤
+import random
+far_players = others[9:]
+random.shuffle(far_players)
+
+selected = [target]
+selected += close_players
+selected += mid_players
+
+# 부족하면 랜덤으로 채움
+remaining = count - len(selected)
+if remaining > 0:
+    selected += far_players[:remaining]
+
+return selected[:count]
 
 
 def split_by_role(players):
