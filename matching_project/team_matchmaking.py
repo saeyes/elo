@@ -36,7 +36,7 @@ def allowed_gap(skill):
     range_type = get_range_type(skill)
 
     if range_type == "low":
-        return 1500
+        return 1000
     elif range_type == "mid":
         return 1100
     else:
@@ -47,11 +47,20 @@ def candidate_count(skill):
     range_type = get_range_type(skill)
 
     if range_type == "low":
-        return 24
+        return 20
     elif range_type == "mid":
         return 18
     else:
         return 14
+
+
+def cross_gap_limit(skill):
+    if skill < 2000:
+        return 1000
+    elif skill < 3000:
+        return 1200
+    else:
+        return 1500
 
 
 def team_average(team):
@@ -62,6 +71,25 @@ def team_std(team):
     avg = team_average(team)
     variance = sum((p["skill"] - avg) ** 2 for p in team) / len(team)
     return variance ** 0.5
+
+
+def tier_value(skill):
+    if skill < 1500:
+        return 1
+    elif skill < 2000:
+        return 2
+    elif skill < 2500:
+        return 3
+    elif skill < 3000:
+        return 4
+    elif skill < 3500:
+        return 5
+    elif skill < 4000:
+        return 6
+    elif skill < 4500:
+        return 7
+    else:
+        return 8
 
 
 def assign_roles(players):
@@ -92,8 +120,19 @@ def pick_near_players(players, target_player_id=None):
 
     count = candidate_count(target["skill"])
     target_limit = allowed_gap(target["skill"])
-
     others = [p for p in players if p["id"] != target_player_id]
+
+    # 저점 입력이면 후보를 더 엄격하게 제한
+    if target["skill"] < 1500:
+        others = [
+            p for p in others
+            if abs(p["skill"] - target["skill"]) <= 1000
+        ]
+    elif target["skill"] < 2000:
+        others = [
+            p for p in others
+            if abs(p["skill"] - target["skill"]) <= 1300
+        ]
 
     close_players = [
         p for p in others
@@ -106,7 +145,7 @@ def pick_near_players(players, target_player_id=None):
 
     mid_players = [
         p for p in others
-        if target_limit < abs(p["skill"] - target["skill"]) <= target_limit + 500
+        if target_limit < abs(p["skill"] - target["skill"]) <= target_limit + 400
     ]
     mid_players = sorted(
         mid_players,
@@ -115,7 +154,7 @@ def pick_near_players(players, target_player_id=None):
 
     far_players = [
         p for p in others
-        if abs(p["skill"] - target["skill"]) > target_limit + 500
+        if abs(p["skill"] - target["skill"]) > target_limit + 400
     ]
     random.shuffle(far_players)
 
@@ -123,7 +162,7 @@ def pick_near_players(players, target_player_id=None):
 
     if count >= 20:
         selected += close_players[:10]
-        selected += mid_players[:8]
+        selected += mid_players[:6]
     elif count >= 18:
         selected += close_players[:8]
         selected += mid_players[:6]
@@ -145,12 +184,6 @@ def split_by_role(players):
     return role_map
 
 
-def build_team_from_role_groups(tanks, dpss, supports):
-    team1 = [tanks[0], dpss[0], dpss[1], supports[0], supports[1]]
-    team2 = [tanks[1], dpss[2], dpss[3], supports[2], supports[3]]
-    return team1, team2
-
-
 def is_team_gap_valid(team):
     skills = [p["skill"] for p in team]
     diff = max(skills) - min(skills)
@@ -161,10 +194,25 @@ def is_team_gap_valid(team):
     return True
 
 
+def is_cross_team_gap_valid(team1, team2):
+    for p1 in team1:
+        for p2 in team2:
+            limit = min(cross_gap_limit(p1["skill"]), cross_gap_limit(p2["skill"]))
+            if abs(p1["skill"] - p2["skill"]) > limit:
+                return False
+    return True
+
+
 def score_match(team1, team2):
     avg_diff = abs(team_average(team1) - team_average(team2))
     std_penalty = team_std(team1) + team_std(team2)
-    return avg_diff + std_penalty * 0.1
+
+    tier_diff = abs(
+        sum(tier_value(p["skill"]) for p in team1) -
+        sum(tier_value(p["skill"]) for p in team2)
+    )
+
+    return avg_diff + std_penalty * 0.1 + tier_diff * 20
 
 
 def fallback_random_teams(players):
@@ -175,7 +223,11 @@ def fallback_random_teams(players):
         return None
 
     selected = assign_roles(pool[:10])
-    return selected[:5], selected[5:10]
+
+    team1 = selected[:5]
+    team2 = selected[5:10]
+
+    return team1, team2
 
 
 def build_best_pair_from_candidates(players):
@@ -220,7 +272,11 @@ def build_best_pair_from_candidates(players):
                 best_any_diff = avg_diff
                 best_any_pair = (team1, team2)
 
-            if is_team_gap_valid(team1) and is_team_gap_valid(team2):
+            if (
+                is_team_gap_valid(team1)
+                and is_team_gap_valid(team2)
+                and is_cross_team_gap_valid(team1, team2)
+            ):
                 if current_score < best_valid_score:
                     best_valid_score = current_score
                     best_valid_diff = avg_diff
