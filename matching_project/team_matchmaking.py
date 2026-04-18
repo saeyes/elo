@@ -1,58 +1,10 @@
 import random
-from itertools import combinations
-
-TEAM_ROLES = ["tank", "dps", "dps", "support", "support"]
+import itertools
 
 
-def get_tier(skill):
-    if skill < 1500:
-        return "Bronze"
-    elif skill < 2000:
-        return "Silver"
-    elif skill < 2500:
-        return "Gold"
-    elif skill < 3000:
-        return "Platinum"
-    elif skill < 3500:
-        return "Diamond"
-    elif skill < 4000:
-        return "Master"
-    elif skill < 4500:
-        return "Grandmaster"
-    else:
-        return "Champion"
-
-
-def get_range_type(skill):
-    if skill < 2000:
-        return "low"
-    elif skill < 3000:
-        return "mid"
-    else:
-        return "high"
-
-
-def allowed_gap(skill):
-    range_type = get_range_type(skill)
-
-    if range_type == "low":
-        return 1500
-    elif range_type == "mid":
-        return 1100
-    else:
-        return 600
-
-
-def candidate_count(skill):
-    range_type = get_range_type(skill)
-
-    if range_type == "low":
-        return 24
-    elif range_type == "mid":
-        return 18
-    else:
-        return 14
-
+# -----------------------------
+# 기본 계산 함수
+# -----------------------------
 
 def team_average(team):
     return sum(p["skill"] for p in team) / len(team)
@@ -60,52 +12,87 @@ def team_average(team):
 
 def team_std(team):
     avg = team_average(team)
-    variance = sum((p["skill"] - avg) ** 2 for p in team) / len(team)
-    return variance ** 0.5
+    return (sum((p["skill"] - avg) ** 2 for p in team) / len(team)) ** 0.5
 
 
-def assign_roles(players):
-    shuffled = players[:]
-    random.shuffle(shuffled)
-
-    assigned = []
-    for i, p in enumerate(shuffled):
-        new_p = p.copy()
-        new_p["role"] = TEAM_ROLES[i % len(TEAM_ROLES)]
-        assigned.append(new_p)
-
-    return assigned
+def score_match(team1, team2):
+    avg_diff = abs(team_average(team1) - team_average(team2))
+    std_diff = abs(team_std(team1) - team_std(team2))
+    return avg_diff + std_diff
 
 
-def pick_near_players(players, target_player_id=None):
-    if target_player_id is None:
-        return sorted(players, key=lambda x: x["skill"])[:14]
+# -----------------------------
+# 랜덤 fallback
+# -----------------------------
 
-    target = None
-    for p in players:
-        if p["id"] == target_player_id:
-            target = p
-            break
-
-    if target is None:
+def fallback_random_teams(players):
+    if len(players) < 10:
         return None
 
-    count = candidate_count(target["skill"])
-    target_limit = allowed_gap(target["skill"])
+    players_copy = players[:]
+    random.shuffle(players_copy)
 
-    others = [p for p in players if p["id"] != target_player_id]
+    return players_copy[:5], players_copy[5:10]
 
-    close_players = [
-        p for p in others
-        if abs(p["skill"] - target["skill"]) <= target_limit
-    ]
-    close_players = sorted(
-        close_players,
-        key=lambda x: abs(x["skill"] - target["skill"])
-    )
 
-    mid_players = [
-        p for p in others
+# -----------------------------
+# 핵심 매칭 함수
+# -----------------------------
+
+def find_best_team_match(players):
+
+    if len(players) < 10:
+        return None, None
+
+    best_pair = None
+    best_score = float("inf")
+    best_avg_diff = float("inf")
+
+    # 🔥 조건 완화 루프 (핵심)
+    for relax in range(0, 1000, 50):
+
+        for comb in itertools.combinations(players, 5):
+            team1 = list(comb)
+            team2 = [p for p in players if p not in team1]
+
+            if len(team2) < 5:
+                continue
+
+            team2 = team2[:5]
+
+            avg_diff = abs(team_average(team1) - team_average(team2))
+
+            # 🔥 조건 완화
+            if avg_diff > (300 + relax):
+                continue
+
+            score = score_match(team1, team2)
+
+            if score < best_score:
+                best_score = score
+                best_avg_diff = avg_diff
+                best_pair = (team1, team2)
+
+        # 👉 하나라도 찾으면 바로 반환
+        if best_pair:
+            return best_pair, round(best_avg_diff, 2)
+
+    # -----------------------------
+    # fallback 1 (랜덤)
+    # -----------------------------
+    fallback = fallback_random_teams(players)
+    if fallback:
+        team1, team2 = fallback
+        return (team1, team2), round(abs(team_average(team1) - team_average(team2)), 2)
+
+    # -----------------------------
+    # fallback 2 (무조건 생성)
+    # -----------------------------
+    players = players[:10]
+    team1 = players[:5]
+    team2 = players[5:10]
+
+    return (team1, team2), round(abs(team_average(team1) - team_average(team2)), 2)        p for p in others
         if target_limit < abs(p["skill"] - target["skill"]) <= target_limit + 500
     ]
     mid_players = sorted(
