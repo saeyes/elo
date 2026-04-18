@@ -10,9 +10,7 @@ app = Flask(__name__)
 
 
 @app.route("/", methods=["GET", "POST"])
-def index(team1, team2 = best_match):
-    global LAST_MATCH
-LAST_MATCH = (team1, team2)
+def index():
     lang = request.args.get("lang", "ko")
     text = translations.get(lang, translations["ko"])
 
@@ -84,6 +82,9 @@ def match_result():
         return redirect(url_for("index"))
 
     team1, team2 = LAST_MATCH
+    
+    global LAST_MATCH
+    LAST_MATCH = (team1, team2)
 
     avg1 = team_average(team1)
     avg2 = team_average(team2)
@@ -101,3 +102,4 @@ def match_result():
         p["skill"] = int(new_avg2)
 
     return redirect(url_for("index"))
+    
